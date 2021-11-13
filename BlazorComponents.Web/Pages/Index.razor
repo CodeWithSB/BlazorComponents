@@ -1,4 +1,21 @@
 ﻿@page "/"
+@using System;
+@using System.Collections.Generic;
+@using Components.ModalDialog;
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+@inject IWebAssemblyHostEnvironment environment;
 
 <h1 class="heading">Hello, world!</h1>
-<Modal></Modal>
+<br>
+<button @onclick="OpenModal">Open Modal</button>
+<Modal @ref="ModalDialog"/>
+
+@code{
+    [CascadingParameter(Name="ModalDialogComponent")]
+    public Modal ModalDialog{get; set;}
+    private async Task OpenModal(){
+        await ModalDialog.OpenModal(typeof(TestComponent));
+    }
+
+}

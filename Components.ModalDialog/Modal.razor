@@ -1,1 +1,53 @@
-﻿<h3>Modal Dialog</h3>
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime;
+@using System;
+@using System.Collections.Generic;
+@using Components.ModalDialog;
+@using Microsoft.AspNetCore.Components;
+
+<CascadingValue Value="this" Name="ModalDialogComponent">
+    @ChildContent
+    @if(ComponentType != null){
+        <div class="modal-backdrop" id="modal-backdrop" @onclick="CloseModal">
+            <div class="modal-container" id="modal-container" @onclick:stopPropagation="true">
+                <div class="modal-wrapper">
+                    <div class="modal-heading">
+                        <h3> Modal Heading </h3>
+                    </div>
+                    <div class="modal-close" @onclick="CloseModal">
+                        &times; 
+                    </div>
+                    <div class="modal-body"> 
+                        <DynamicComponent Type="@(ComponentType)" Parameters="@ComponentParameters"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-footer-close" @onclick="CloseModal"> Close </button>
+                        @* <button class="modal-footer-submit"> Submit </button> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</CascadingValue>
+
+@code{
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    public Dictionary<string, object> ComponentParameters { get; set; } = new Dictionary<string, object>();
+
+    public Type? ComponentType { get; set; } = null;
+
+    public async Task OpenModal(Type? componentType, Dictionary<string, object> componentParameters = null){
+        this.ComponentType = componentType;
+        if(componentParameters!=null && componentParameters.Count()>0){
+            this.ComponentParameters = componentParameters;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task CloseModal(MouseEventArgs ev){
+        ComponentType = null;
+        await InvokeAsync(StateHasChanged);
+    }
+}
