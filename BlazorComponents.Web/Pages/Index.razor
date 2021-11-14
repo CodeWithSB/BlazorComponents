@@ -5,40 +5,132 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 @inject IWebAssemblyHostEnvironment environment;
 
-<h1 class="heading">Modal Dialog Buttons</h1>
-<br>
-<button class="componentModal" @onclick="OpenComponentModal">Open Component Modal</button>
-<button class="alertModal" @onclick="OpenAlertModal">Open Alert Modal</button>
-<button class="confirmationModal" @onclick="OpenConfirmationModal">Open Confirmation Modal</button>
-<Modal @ref="ModalDialog"/>
+<div class="demo">
+    <h2 class="heading">Modal Dialog Buttons</h2>
+    <div class="button-containers">
+        <button class="componentModal" @onclick="OpenComponentModal">Open Component Modal</button>
+        <button class="alertModal" @onclick="OpenAlertModal">Open Alert Modal</button>
+        <button class="confirmationModal" @onclick="OpenConfirmationModal">Open Confirmation Modal</button>
+    </div>
+    <p style="color:red; margin-left:10px"><strong>Note:</strong> Below options aren't gonna affect the Alert and Confirmation Modal.</p>
+
+    @if(dialogOptions != null){
+        <div class="options-demo">
+            <EditForm Model="dialogOptions">
+                <div class="modal-options">
+                    <div class="option-wrapper">
+                        <p> Close modal on backdrop click?</p>
+                        <InputRadioGroup @bind-Value="dialogOptions.IsBackDropClickCloseAllowed">
+                            <InputRadio id="backdrop-true" Value="@true" /> <label for="backdrop-true" style="margin:0px 20px 0px 0px">true</label>
+                            <InputRadio id="backdrop-false" Value="@false" /> <label for="backdrop-false" style="margin:0px 20px 0px 0px">false</label>
+                        </InputRadioGroup>
+                    </div>
+
+                    <div class="option-wrapper">
+                        <p> Show Header?</p>
+                        <InputRadioGroup @bind-Value="dialogOptions.ShowHeader">
+                            <InputRadio id="showHeader-true" Value="@true" /> <label for="showHeader-true" style="margin:0px 20px 0px 3px">true</label>
+                            <InputRadio id="showHeader-false" Value="@false" /> <label for="showHeader-false" style="margin:0px 20px 0px 3px">false</label>
+                        </InputRadioGroup>
+                    </div>
+
+                    <div class="option-wrapper">
+                        <p> Custom Header: </p>
+                        <InputText class="option-text" @bind-Value="dialogOptions.HeaderText" />
+                    </div>
+
+                    <div class="option-wrapper">
+                        <p> Show Footer?</p>
+                        <InputRadioGroup @bind-Value="dialogOptions.ShowFooter">
+                            <InputRadio id="showFooter-true" Value="@true" /> <label for="showFooter-true" style="margin:0px 20px 0px 3px">true</label>
+                            <InputRadio id="showFooter-false" Value="@false" /> <label for="showFooter-false" style="margin:0px 20px 0px 3px">false</label>
+                        </InputRadioGroup>
+                    </div>
+
+                    <div class="option-wrapper">
+                        <p> Show Corner Close?</p>
+                        <InputRadioGroup @bind-Value="dialogOptions.ShowCornerClose">
+                            <InputRadio id="showCornerClose-true" Value="@true" /> <label for="showCornerClose-true" style="margin:0px 20px 0px 3px">true</label>
+                            <InputRadio id="showCornerClose-false" Value="@false" /> <label for="showCornerClose-false" style="margin:0px 20px 0px 3px">false</label>
+                        </InputRadioGroup>
+                    </div>
+
+                    <div class="option-wrapper">
+                        <p> Show Footer Close?</p>
+                        <InputRadioGroup @bind-Value="dialogOptions.ShowFooterClose">
+                            <InputRadio id="showFooterClose-true" Value="@true" /> <label for="showFooterClose-true" style="margin:0px 20px 0px 3px">true</label>
+                            <InputRadio id="showFooterClose-false" Value="@false" /> <label for="showFooterClose-false" style="margin:0px 20px 0px 3px">false</label>
+                        </InputRadioGroup>
+                    </div>
+
+                    <div class="option-wrapper">
+                        <p> Show Footer Submit?</p>
+                        <InputRadioGroup @bind-Value="dialogOptions.ShowFooterSubmit">
+                            <InputRadio id="showFooterSubmit-true" Value="@true" /> <label for="showFooterSubmit-true" style="margin:0px 20px 0px 3px">true</label>
+                            <InputRadio id="showFooterSubmit-false" Value="@false" /> <label for="showFooterSubmit-false" style="margin:0px 20px 0px 3px">false</label>
+                        </InputRadioGroup>
+                    </div>
+
+                    <div class="option-wrapper">
+                        <p> Custom Close Button Text: </p>
+                        <InputText class="option-text"  @bind-Value="dialogOptions.CloseButtonText" />
+                    </div>
+                    
+                    <div class="option-wrapper">
+                        <p> Custom Submit Button Text: </p>
+                        <InputText class="option-text" @bind-Value="dialogOptions.SubmitButtonText" />
+                    </div>
+                </div>
+            </EditForm>
+            <div class="console-result">
+                @foreach (string item in ConsoleResults)
+                {
+                    <p> @item </p>
+                }
+            </div>
+        </div>
+    }
+</div>
+
 
 @code{
-    [CascadingParameter(Name="ModalDialogComponent")]
+
+    [CascadingParameter]
     public Modal ModalDialog{get; set;}
+
+    private DialogOptions dialogOptions = new DialogOptions();
+
+    List<string> ConsoleResults = new List<string>();
+    
     private async Task OpenComponentModal(){
-        DialogResult dr = await ModalDialog.OpenComponentModal(typeof(TestComponent));
+        DialogResult dr = await ModalDialog.OpenComponentModal(typeof(TestComponent), null, dialogOptions);
         if(dr == DialogResult.OK){
-            Console.WriteLine("OK");
+            ConsoleResults.Add("DialogResult.OK");
+            Console.WriteLine("DialogResult.OK");
         }
         if(dr == DialogResult.CANCEL){
-            Console.WriteLine("CLOSED");
+            ConsoleResults.Add("DialogResult.CANCEL");
+            Console.WriteLine("DialogResult.CANCEL");
         }
     }
 
     private async Task OpenAlertModal(){
-        DialogResult dr = await ModalDialog.OpenAlertModal(((MarkupString)"<p> Congratulations!! Here is the Alert Modal Dialog Box!!!</p>"));
+        DialogResult dr = await ModalDialog.OpenAlertModal(((MarkupString)"<p> Hello World! </p>"));
         if(dr == DialogResult.OK){
-            Console.WriteLine("Dialog Result: OK");
+            ConsoleResults.Add("DialogResult.OK");
+            Console.WriteLine("DialogResult.OK");
         }
     }
 
     private async Task OpenConfirmationModal(){
         DialogResult dr = await ModalDialog.OpenConfirmationModal(((MarkupString)"<p> Are you sure? </p>"));
-        if(dr == DialogResult.OK){
-            Console.WriteLine("I'm Sure.");
+        if(dr == DialogResult.OK){            
+            ConsoleResults.Add("DialogResult.OK");
+            Console.WriteLine("DialogResult.OK");
         }
-        else{
-            Console.WriteLine("Sorry, Cancelled.");
+        if(dr == DialogResult.CANCEL){
+            ConsoleResults.Add("DialogResult.CANCEL");
+            Console.WriteLine("DialogResult.CANCEL");
         }
     }
 }

@@ -5,7 +5,7 @@
 @using Components.ModalDialog;
 @using Microsoft.AspNetCore.Components;
 
-<CascadingValue Value="this" Name="ModalDialogComponent">
+<CascadingValue Value="this">
     @ChildContent
     @if(ComponentType != null || CustomMarkUp != null){
         <div class="modal-backdrop" id="modal-backdrop" @onclick="BackdropClose">

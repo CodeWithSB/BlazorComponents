@@ -1,5 +1,23 @@
+.demo {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
 .heading {
-	color: #333;
+	background-color: #222;
+	color: #eee;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.button-containers {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 5px;
+	margin-top: 10px;
+	padding:10px;
 }
 
 button {
@@ -11,17 +29,59 @@ button {
 	text-align: center;
 	cursor: pointer;
 	color: white;
-	margin: 0px 5px;
 }
 
-.componentModal{
-	background-color: rgba(236, 72, 153)
+.componentModal {
+	background-color: rgba(236, 72, 153);
 }
 
-.alertModal{
-	background-color: rgba(245, 158, 11)
+.alertModal {
+	background-color: rgba(245, 158, 11);
 }
 
-.confirmationModal{
+.confirmationModal {
 	background-color: rgba(16, 185, 129);
+}
+
+.options-demo{
+	padding: 0px 10px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap:15px;
+}
+
+.modal-options {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	background-color: #333;
+	color: white;
+	padding: 25px;
+	border-radius: 10px;
+}
+
+.option-wrapper {
+	background-color: #555;
+	padding: 10px;
+	border-radius: 10px;
+}
+
+.option-wrapper > p{
+	margin-bottom: 10px;
+}
+
+.console-result{
+	background-color: #333;
+	color:white;
+	border-radius: 10px;
+	padding:25px;
+}
+
+@media only screen and (max-width: 960px) {
+	.options-demo{
+		padding: 0px 10px;
+		display: grid;
+		grid-template-columns: repeat(1, 1fr);
+		gap:15px;
+	}
 }

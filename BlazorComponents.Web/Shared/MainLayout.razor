@@ -3,3 +3,9 @@
 <div style="padding:10px">
     @Body
 </div>
+<Modal @ref="ModalDialog"/>
+
+@code{
+    [CascadingParameter]
+    public Modal ModalDialog {get; set;}
+}
