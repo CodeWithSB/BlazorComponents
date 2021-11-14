@@ -2,7 +2,6 @@
 @inject IJSRuntime JSRuntime;
 @using System;
 @using System.Collections.Generic;
-@using Components.ModalDialog;
 @using Microsoft.AspNetCore.Components;
 
 <CascadingValue Value="this">
@@ -67,14 +66,14 @@
     public RenderFragment ChildContent { get; set; }
     public Dictionary<string, object> ComponentParameters { get; set; } = new Dictionary<string, object>();
     public Type? ComponentType { get; set; } = null;
-    public DialogOptions Options {get; set;}
+    public DialogOptions? Options {get; set;}
     public ModalDialogType DialogType { get; set; } = ModalDialogType.ALERT;
     public MarkupString? CustomMarkUp { get; set; } = null;
 
     public DialogResult Result { get; set; }
-    TaskCompletionSource<bool> taskCompletionSource = null;
+    TaskCompletionSource<bool> taskCompletionSource = new TaskCompletionSource<bool>();
 
-    public async Task<DialogResult> OpenComponentModal(Type? componentType, Dictionary<string, object> componentParameters = null, DialogOptions options = null){
+    public async Task<DialogResult> OpenComponentModal(Type? componentType, Dictionary<string, object>? componentParameters = null, DialogOptions? options = null){
         DialogType = ModalDialogType.CUSTOM;
         if(options != null){
             this.Options = options;
