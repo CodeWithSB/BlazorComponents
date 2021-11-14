@@ -1,21 +1,44 @@
 ﻿@page "/"
 @using System;
-@using System.Collections.Generic;
 @using Components.ModalDialog;
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 @inject IWebAssemblyHostEnvironment environment;
 
-<h1 class="heading">Hello, world!</h1>
+<h1 class="heading">Modal Dialog Buttons</h1>
 <br>
-<button @onclick="OpenModal">Open Modal</button>
+<button class="componentModal" @onclick="OpenComponentModal">Open Component Modal</button>
+<button class="alertModal" @onclick="OpenAlertModal">Open Alert Modal</button>
+<button class="confirmationModal" @onclick="OpenConfirmationModal">Open Confirmation Modal</button>
 <Modal @ref="ModalDialog"/>
 
 @code{
     [CascadingParameter(Name="ModalDialogComponent")]
     public Modal ModalDialog{get; set;}
-    private async Task OpenModal(){
-        await ModalDialog.OpenModal(typeof(TestComponent));
+    private async Task OpenComponentModal(){
+        DialogResult dr = await ModalDialog.OpenComponentModal(typeof(TestComponent));
+        if(dr == DialogResult.OK){
+            Console.WriteLine("OK");
+        }
+        if(dr == DialogResult.CANCEL){
+            Console.WriteLine("CLOSED");
+        }
     }
 
+    private async Task OpenAlertModal(){
+        DialogResult dr = await ModalDialog.OpenAlertModal(((MarkupString)"<p> Congratulations!! Here is the Alert Modal Dialog Box!!!</p>"));
+        if(dr == DialogResult.OK){
+            Console.WriteLine("Dialog Result: OK");
+        }
+    }
+
+    private async Task OpenConfirmationModal(){
+        DialogResult dr = await ModalDialog.OpenConfirmationModal(((MarkupString)"<p> Are you sure? </p>"));
+        if(dr == DialogResult.OK){
+            Console.WriteLine("I'm Sure.");
+        }
+        else{
+            Console.WriteLine("Sorry, Cancelled.");
+        }
+    }
 }

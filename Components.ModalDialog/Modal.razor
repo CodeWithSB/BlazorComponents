@@ -7,23 +7,54 @@
 
 <CascadingValue Value="this" Name="ModalDialogComponent">
     @ChildContent
-    @if(ComponentType != null){
-        <div class="modal-backdrop" id="modal-backdrop" @onclick="CloseModal">
+    @if(ComponentType != null || CustomMarkUp != null){
+        <div class="modal-backdrop" id="modal-backdrop" @onclick="BackdropClose">
             <div class="modal-container" id="modal-container" @onclick:stopPropagation="true">
                 <div class="modal-wrapper">
-                    <div class="modal-heading">
-                        <h3> Modal Heading </h3>
-                    </div>
-                    <div class="modal-close" @onclick="CloseModal">
-                        &times; 
-                    </div>
+
+                    @if (Options.ShowHeader)
+                    {
+                        <div class="modal-heading">
+                            <h3> @Options.HeaderText </h3>
+                        </div>
+                    }
+
+                    @if(Options.ShowCornerClose){
+                        <div class="modal-close" @onclick="CloseModal">
+                            &times; 
+                        </div>
+                    }
+
                     <div class="modal-body"> 
-                        <DynamicComponent Type="@(ComponentType)" Parameters="@ComponentParameters"/>
+                        @switch (DialogType)
+                        {
+                            case ModalDialogType.CUSTOM:
+                                <DynamicComponent Type="@ComponentType" Parameters="@ComponentParameters"/>;
+                                break;
+                            case ModalDialogType.ALERT:
+                                @((MarkupString)CustomMarkUp)
+                                break;
+                            case ModalDialogType.CONFIRM:
+                                @((MarkupString)CustomMarkUp)
+                                break;
+                            default:
+                                throw new Exception("We do not support the selected modal");
+                                break;
+                        }
                     </div>
-                    <div class="modal-footer">
-                        <button class="modal-footer-close" @onclick="CloseModal"> Close </button>
-                        @* <button class="modal-footer-submit"> Submit </button> *@
-                    </div>
+
+                    @if(Options.ShowFooter){
+                        <div class="modal-footer">
+                            @if (Options.ShowFooterClose)
+                            {
+                                <button class="modal-footer-close" @onclick="CloseModal"> @Options.CloseButtonText </button>
+                            }
+                            @if (Options.ShowFooterSubmit){
+                                <button class="modal-footer-submit" @onclick="SubmitModal"> @Options.SubmitButtonText </button>
+                            }
+                        </div>
+                    }
+
                 </div>
             </div>
         </div>
@@ -35,19 +66,86 @@
     [Parameter]
     public RenderFragment ChildContent { get; set; }
     public Dictionary<string, object> ComponentParameters { get; set; } = new Dictionary<string, object>();
-
     public Type? ComponentType { get; set; } = null;
+    public DialogOptions Options {get; set;}
+    public ModalDialogType DialogType { get; set; } = ModalDialogType.ALERT;
+    public MarkupString? CustomMarkUp { get; set; } = null;
 
-    public async Task OpenModal(Type? componentType, Dictionary<string, object> componentParameters = null){
+    public DialogResult Result { get; set; }
+    TaskCompletionSource<bool> taskCompletionSource = null;
+
+    public async Task<DialogResult> OpenComponentModal(Type? componentType, Dictionary<string, object> componentParameters = null, DialogOptions options = null){
+        DialogType = ModalDialogType.CUSTOM;
+        if(options != null){
+            this.Options = options;
+        }
+        else{
+            Options = new DialogOptions();
+        }
         this.ComponentType = componentType;
-        if(componentParameters!=null && componentParameters.Count()>0){
+        if(componentParameters != null && componentParameters.Count() > 0){
             this.ComponentParameters = componentParameters;
         }
         await InvokeAsync(StateHasChanged);
+        taskCompletionSource = new TaskCompletionSource<bool>();
+        Result = DialogResult.OPEN;
+        await taskCompletionSource.Task;
+        return Result;
+    }
+
+    public async Task<DialogResult> OpenAlertModal(MarkupString alertText){
+        DialogType = ModalDialogType.ALERT;
+        Options = new DialogOptions();
+        Options.ShowCornerClose = false;
+        Options.ShowFooterClose = false;
+        Options.ShowFooterSubmit = true;
+        Options.SubmitButtonText = "Ok";
+        this.CustomMarkUp = alertText;
+        await InvokeAsync(StateHasChanged);
+        taskCompletionSource = new TaskCompletionSource<bool>();
+        Result = DialogResult.OPEN;
+        await taskCompletionSource.Task;
+        return Result;
+    }
+
+    public async Task<DialogResult> OpenConfirmationModal(MarkupString confirmationBody){
+        DialogType = ModalDialogType.CONFIRM;
+        Options = new DialogOptions();
+        Options.ShowCornerClose = false;
+        Options.ShowFooterClose = true;
+        Options.ShowFooterSubmit = true;
+        Options.SubmitButtonText = "Confirm";
+        Options.CloseButtonText = "Cancel";
+        this.CustomMarkUp = confirmationBody;
+        await InvokeAsync(StateHasChanged);
+        taskCompletionSource = new TaskCompletionSource<bool>();
+        Result = DialogResult.OPEN;
+        await taskCompletionSource.Task;
+        return Result;
     }
 
     public async Task CloseModal(MouseEventArgs ev){
         ComponentType = null;
+        CustomMarkUp = null;
         await InvokeAsync(StateHasChanged);
+        Result = DialogResult.CANCEL;
+        taskCompletionSource?.TrySetResult(true);
     }
+
+    public async Task SubmitModal(MouseEventArgs ev){
+        ComponentType = null;
+        CustomMarkUp = null;
+        await InvokeAsync(StateHasChanged);
+        Result = DialogResult.OK;
+        taskCompletionSource?.TrySetResult(true);
+    }
+
+    public async Task BackdropClose(MouseEventArgs ev){
+        if(Options.IsBackDropClickCloseAllowed){
+            await this.CloseModal(ev);
+        }
+        Result = DialogResult.NONE;
+        taskCompletionSource?.TrySetResult(true);
+    }
+
 }

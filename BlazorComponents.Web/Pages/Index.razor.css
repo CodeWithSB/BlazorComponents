@@ -1,5 +1,5 @@
 .heading {
-	color: #10b981;
+	color: #333;
 }
 
 button {
@@ -10,6 +10,18 @@ button {
 	padding: 8px 16px;
 	text-align: center;
 	cursor: pointer;
-	background-color: var(--soft-green);
 	color: white;
+	margin: 0px 5px;
+}
+
+.componentModal{
+	background-color: rgba(236, 72, 153)
+}
+
+.alertModal{
+	background-color: rgba(245, 158, 11)
+}
+
+.confirmationModal{
+	background-color: rgba(16, 185, 129);
 }
