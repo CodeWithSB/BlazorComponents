@@ -1,0 +1,89 @@
+/* _content/Components.ModalDialog/Modal.razor.rz.scp.css */
+.modal-backdrop[b-7eu3cworgi] {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	min-height: 100vh;
+	background-color: rgba(31, 41, 55, 0.5);
+	display: flex;
+}
+
+.modal-container[b-7eu3cworgi] {
+	padding: 10px;
+	background-color: var(--light-gray);
+	color: var(--medium-gray);
+	border-radius: 10px;
+	margin: auto;
+	min-width: 400px;
+	max-width: 80vw;
+	box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.modal-wrapper[b-7eu3cworgi] {
+	text-align: left;
+	position: relative;
+}
+
+.modal-heading[b-7eu3cworgi] {
+	padding: 5px;
+	border-radius: 5px;
+}
+
+.modal-close[b-7eu3cworgi] {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	padding: 6px 8px 10px 8px;
+	margin-left: 20px;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: var(--soft-red);
+	color: var(--light-gray);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: super;
+	cursor: pointer;
+}
+
+.modal-close:hover[b-7eu3cworgi]{
+	box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.modal-body[b-7eu3cworgi] {
+	padding: 5px;
+}
+
+.modal-footer[b-7eu3cworgi] {
+	padding: 5px;
+	display: flex;
+	justify-content: end;
+	align-items: center;
+	gap: 10px;
+}
+
+.modal-footer > button[b-7eu3cworgi] {
+	border: none;
+	border-radius: 20px;
+	min-width: 60px;
+	min-height: 20px;
+	padding: 8px 16px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.modal-footer > button[b-7eu3cworgi]{
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.modal-footer > .modal-footer-close[b-7eu3cworgi] {
+	background-color: var(--soft-red);
+	color: white;
+}
+
+.modal-footer > .modal-footer-submit[b-7eu3cworgi] {
+	background-color: var(--soft-green);
+	color: white;
+}
