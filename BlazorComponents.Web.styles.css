@@ -48,8 +48,8 @@ button[b-8v3q08rud3] {
 
 .options-demo[b-8v3q08rud3]{
 	padding: 0px 10px;
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	display: flex;
+	flex-direction: row;
 	gap:15px;
 }
 
@@ -67,6 +67,7 @@ button[b-8v3q08rud3] {
 	background-color: #555;
 	padding: 10px;
 	border-radius: 10px;
+	overflow: auto;
 }
 
 .option-wrapper > p[b-8v3q08rud3]{
@@ -87,8 +88,8 @@ button[b-8v3q08rud3] {
 @media only screen and (max-width: 960px) {
 	.options-demo[b-8v3q08rud3]{
 		padding: 0px 10px;
-		display: grid;
-		grid-template-columns: repeat(1, 1fr);
+		display: flex;
+		flex-direction: column;
 		gap:15px;
 	}
 }
