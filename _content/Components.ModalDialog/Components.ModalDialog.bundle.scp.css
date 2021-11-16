@@ -1,10 +1,10 @@
 /* _content/Components.ModalDialog/Modal.razor.rz.scp.css */
 .modal-backdrop[b-7eu3cworgi] {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
-	width: calc(100vw - 20px);
-	min-height: 100vh;
+	width: 100%;
+	min-height: 100%;
 	background-color: rgba(31, 41, 55, 0.5);
 	display: flex;
 }
@@ -15,7 +15,7 @@
 	color: var(--medium-gray);
 	border-radius: 10px;
 	margin: auto;
-	min-width: 400px;
+	min-width: 300px;
 	max-width: 80vw;
 	box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
@@ -59,7 +59,7 @@
 .modal-footer[b-7eu3cworgi] {
 	padding: 5px;
 	display: flex;
-	justify-content: end;
+	justify-content: flex-end;
 	align-items: center;
 	gap: 10px;
 }
