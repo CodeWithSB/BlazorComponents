@@ -2,7 +2,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100vw;
+	width: calc(100vw - 20px);
 	min-height: 100vh;
 	background-color: rgba(31, 41, 55, 0.5);
 	display: flex;
@@ -47,7 +47,7 @@
 	cursor: pointer;
 }
 
-.modal-close:hover{
+.modal-close:hover {
 	box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 
@@ -73,8 +73,8 @@
 	cursor: pointer;
 }
 
-.modal-footer > button{
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+.modal-footer > button {
+	box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 
 .modal-footer > .modal-footer-close {
